@@ -1,0 +1,90 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+
+public enum MathType
+{
+    Increase,
+    Decrease,
+    Add,
+    Remove
+}
+
+public class EntityStat : MonoBehaviour
+{
+    // 공,방력, 피증, 치확, 치피, 받피증, 공속, 이속 
+
+    Dictionary<string, float> baseValue = new();
+    Dictionary<string, float> resultValue = new();
+    public List<Buf> bufs = new();
+
+    public struct Buf
+    {
+        public string key;
+        public MathType mathtype;
+        public float Value;
+    }
+    struct StatValue
+    {
+        public string Key;
+        public float Value;
+    }
+    [SerializeField]
+
+    List<StatValue> defualtStat = new()
+    {
+        new StatValue{Key="attackDamage", Value = 3},
+        new StatValue{Key="dfense", Value = 0},
+        new StatValue{Key="increaseDamage", Value = 0},
+        new StatValue{Key="critPer", Value = 0},
+        new StatValue{Key="critMul", Value = 0},
+        new StatValue{Key="hurtDamage", Value = 0},
+        new StatValue{Key="atkSpeed", Value = 0},
+        new StatValue{Key="moveSpeed", Value = 0},
+    };
+    
+    public float attakDamage, defense, increaseDamage; 
+    public float critPer, critMul, hurtDamage, atkSpeed, moveSpeed;
+
+    void Start()
+    {
+        foreach (StatValue val in defualtStat)
+        {
+            baseValue[val.Key] = val.Value;
+            Calc(val.Key);
+        }
+    }
+    public float GetResultValue(string Key)
+    {
+        return resultValue[Key];
+    }
+
+
+    public float Calc(string key)
+    {
+        float value = baseValue[key];
+        float increase = 100;
+
+        foreach (Buf buf in bufs)
+        {
+        switch (buf.mathtype)
+        {
+            case MathType.Increase:
+                increase += buf.Value;
+                break;
+            case MathType.Decrease:
+                increase -= buf.Value;
+                break;
+            case MathType.Add:
+                value += buf.Value;
+                break;
+            case MathType.Remove:
+                value -= buf.Value;
+                break;
+        }
+        }
+
+        return resultValue[key] = value * increase * 0.01f;
+    }
+
+}
