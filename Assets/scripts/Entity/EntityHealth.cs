@@ -87,6 +87,11 @@ public class EntityHealth : MonoBehaviour
         if (UnityEngine.Random.Range(0, 100) <= critPer)
             dmg *= 1 + critMul / 100;
 
+        dmg -= Stat.GetResultValue("defense");
+
+        if (dmg < 0)
+            dmg = 1;
+
         health -= dmg;
 
         if (health <= 0)

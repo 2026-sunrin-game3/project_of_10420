@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMovement))]
 [RequireComponent(typeof(Rigidbody2D))]
 
-public class PlayerControll : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public PlayerInput input;
     public PlayerMovement movement;

@@ -24,6 +24,7 @@ public class EntityStat : MonoBehaviour
         public MathType mathtype;
         public float Value;
     }
+    [System.Serializable]
     struct StatValue
     {
         public string Key;
@@ -34,7 +35,7 @@ public class EntityStat : MonoBehaviour
     List<StatValue> defualtStat = new()
     {
         new StatValue{Key="attackDamage", Value = 3},
-        new StatValue{Key="dfense", Value = 0},
+        new StatValue{Key="defense", Value = 0},
         new StatValue{Key="increaseDamage", Value = 0},
         new StatValue{Key="critPer", Value = 0},
         new StatValue{Key="critMul", Value = 0},
