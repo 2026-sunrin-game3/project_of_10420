@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -36,10 +37,15 @@ public class PlayerMovement : MonoBehaviour
         return cast.Length > 0;
     }
 
-    public void jump()
+    public bool Jump()
     {
         if(Onground())
+        {
             SetVelocity(Vector2.up * jumpPower);
+
+            return true;
+        }
+        return false;
     }
 
 
