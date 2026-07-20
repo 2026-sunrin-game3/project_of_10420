@@ -73,21 +73,24 @@ public class EntityStat : MonoBehaviour
 
         foreach (Buf buf in bufs)
         {
-        switch (buf.mathtype)
-        {
-            case MathType.Increase:
-                increase += buf.Value;
-                break;
-            case MathType.Decrease:
-                increase -= buf.Value;
-                break;
-            case MathType.Add:
-                value += buf.Value;
-                break;
-            case MathType.Remove:
-                value -= buf.Value;
-                break;
-        }
+            if (buf.key != key)
+                continue;
+
+            switch (buf.mathtype)
+            {
+                case MathType.Increase:
+                    increase += buf.Value;
+                    break;
+                case MathType.Decrease:
+                    increase -= buf.Value;
+                    break;
+                case MathType.Add:
+                    value += buf.Value;
+                    break;
+                case MathType.Remove:
+                    value -= buf.Value;
+                    break;
+            }
         }
 
         return resultValue[key] = value * increase * 0.01f;
