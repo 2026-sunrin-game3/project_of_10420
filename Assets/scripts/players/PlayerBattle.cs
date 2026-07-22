@@ -1,5 +1,7 @@
 using System.Collections;
+using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.UI;
 [System.Serializable]
 public struct AttackRange
 {
@@ -20,6 +22,13 @@ public class PlayerBattle : MonoBehaviour
     [SerializeField] LayerMask enemyMask;
     [SerializeField] float dashPower, dashTime;
     public bool inDash;
+    [SerializeField] Slider Healthbar;
+    public GameObject particle;
+
+    public float skill1_cool = 0f;
+    public bool skill1 = false;
+    public float skill2_cool = 5f;
+    public bool skill2 = false;
 
 
     void Start()
@@ -44,8 +53,20 @@ public class PlayerBattle : MonoBehaviour
 
     void Update()
     {
+        Healthbar.value = health.health / health.maxhealth;
         if (atkCool > 0)
             atkCool -= Time.deltaTime * (1 + Stat.GetResultValue("atkSpeed") / 100);
+
+        if (skill1)
+        {
+            skill1_cool += Time.deltaTime;
+
+            if (skill1_cool >= 10f)
+            {
+                skill1 = false;
+                skill1_cool = 0f;
+            }
+        }
     }
 
     public void Dash(int direction)
@@ -84,11 +105,31 @@ public class PlayerBattle : MonoBehaviour
 
     public void Skill1()
     {
+        if (skill1)
+        {
+            Debug.Log("스킬쿨 남음");
+            return;
+        }
         StartCoroutine(Skill1_());
+        skill1 = true;
+        Debug.Log("사용됌");
+
     }
+
+    public void Skill2()
+    {
+        if (skill2)
+        {
+            Debug.Log("스킬쿨 남음");
+            return;
+        }
+    }
+
+
 
     IEnumerator Skill1_()
     {
+        particle.SetActive(true);
         var atkBuf = new EntityStat.Buf
         {
           key = "attackDamage",
@@ -111,6 +152,7 @@ public class PlayerBattle : MonoBehaviour
 
         Stat.bufs.Remove(atkBuf);
         Stat.bufs.Remove(attackSpeedBuf);
+        particle.SetActive(false);
         
 
         Stat.Calc("attackDamage");
